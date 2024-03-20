@@ -4,10 +4,10 @@ import requests
 
 # Function to get data from Google Spreadsheet
 def get_data():
-    url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTnflGSDkG_l9mSnawp-HEHX-R5jMfluS1rp0HlF_hMBpQvtG21d3-zPE4TxD80CvQVPjJszeOmNWJB/pub?output=xlsx'
+    url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTnflGSDkG_l9mSnawp-HEHX-R5jMfluS1rp0HlF_hMBpQvtG21d3-zPE4TxD80CvQVPjJszeOmNWJB/pub?gid=384797514&single=true&output=csv'
     response = requests.get(url)
     assert response.status_code == 200, 'Wrong status code'
-    df = pd.read_excel(url)
+    df = pd.read_csv(url)
 
     # Clean and convert the 'TAHUN DT' column
     df['TAHUN DT'] = pd.to_numeric(df['TAHUN DT'], errors='coerce').fillna(0).astype(int)
