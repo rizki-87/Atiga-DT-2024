@@ -2,15 +2,24 @@ import streamlit as st
 import gspread
 import pandas as pd
 
-# Inisialisasi client gspread untuk akses spreadsheet publik
-gc = gspread.service_account()
+# Function to get data from Google Spreadsheet
+def get_data():
+    # Open the public spreadsheet
+    gc = gspread.Client()
+    sh = gc.open_by_url('https://docs.google.com/spreadsheets/d/1u8W2CTCgSSQAFuci59bMmFczQyH3_7ajgCRJJH9CNQE')
+    worksheet = sh.worksheet('Combined Sheet')
+    data = worksheet.get_all_records()
+    df = pd.DataFrame(data)
+    return df
 
-# Buka spreadsheet publik dan ambil data dari sheet tertentu
-spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1u8W2CTCgSSQAFuci59bMmFczQyH3_7ajgCRJJH9CNQE'
-sh = gc.open_by_url(spreadsheet_url)
-worksheet = sh.worksheet('combined sheet')
-df = pd.DataFrame(worksheet.get_all_records())
-
-# Menampilkan data di Streamlit
+# Display data in Streamlit
 st.title('Dashboard Visualisasi Data')
-st.write(df)
+
+# Button for refreshing data
+if st.button('Refresh Data'):
+    df = get_data()
+    st.write(df)
+else:
+    # Display the initial data when the app is first run
+    df = get_data()
+    st.write(df)
