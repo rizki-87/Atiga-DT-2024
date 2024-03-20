@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import requests
+import matplotlib.pyplot as plt
 from datetime import datetime, date
 
 # Function to get data from Google Spreadsheet
@@ -15,19 +15,12 @@ def get_data():
     df['TAHUN DT'] = pd.to_numeric(df['TAHUN DT'], errors='coerce')
 
     # Fill NaN values with a value of your choice or drop them
-    df['TAHUN DT'] = df['TAHUN DT'].fillna(0).astype(int) # Option 1: Fill with 0
-    # df = df.dropna(subset=['TAHUN DT'])  # Option 2: Drop rows with NaN in 'TAHUN DT'
-
-    # Now safely convert to integers
-    df['TAHUN DT'] = df['TAHUN DT'].astype(int)
+    df['TAHUN DT'] = df['TAHUN DT'].fillna(0).astype(int)  # Option 1: Fill with 0
 
     return df
 
 # Tentukan lokasi logo perusahaan Anda
 logo_path = "atiga.png"
-
-# Tampilkan logo di aplikasi Streamlit
-# st.image(logo_path, use_column_width=True)
 
 # Menggunakan kolom untuk menyesuaikan tata letak
 col1, col2 = st.columns([3, 1])  # Sesuaikan rasio sesuai kebutuhan
@@ -60,18 +53,19 @@ with st.sidebar:
     start_date = date(2024, 1, 1)
     end_date = date(2024, 12, 31)
     
-    # Check if st.date_input is returning one date or a range of dates
     selected_date = st.date_input("Select date", [start_date, end_date], min_value=start_date, max_value=end_date)
 
-    # If a range of dates is returned, unpack them into two variables
+    # Handle single and range of dates input
     if isinstance(selected_date, list):
+        # Unpack range of dates
         selected_start_date, selected_end_date = selected_date
         st.write("Selected Start Date:", selected_start_date.strftime("%d-%m-%Y"))
         st.write("Selected End Date:", selected_end_date.strftime("%d-%m-%Y"))
     else:
-        # Only one date is returned, use it as both start and end date
+        # Handle single date input
         selected_start_date = selected_end_date = selected_date
         st.write("Selected Date:", selected_start_date.strftime("%d-%m-%Y"))
+    
     # Slicer for "Status DT"
     unique_status = df['STATUS DT'].unique().tolist()
     selected_status = st.multiselect('Select Status DT', unique_status, default=unique_status)
@@ -89,3 +83,4 @@ if st.button('Refresh Data'):
 else:
     # Display the filtered data when the app is first run
     st.write(filtered_data)
+
