@@ -26,27 +26,33 @@ def get_data():
 # Display data in Streamlit
 st.title('Monitoring Ketersediaan & Kondisi Dump Truck')
 
-# Get data
+# Dapatkan data
 df = get_data()
 
-# Assuming 'TANGGAL' is the name of your date column
-if 'TANGGAL' in df:
+# Asumsikan 'TANGGAL' adalah nama kolom tanggal Anda
+if 'TANGGAL' in df and not df['TANGGAL'].isnull().all():
+    # Konversi string ke datetime jika belum diubah
+    df['TANGGAL'] = pd.to_datetime(df['TANGGAL'], errors='coerce')
+    
     min_date = df['TANGGAL'].min()
     max_date = df['TANGGAL'].max()
 
-    # Create the date slider
-    selected_date = st.slider(
-        "Pilih Tanggal",
-        min_value=min_date.to_pydatetime(),  # Convert to python datetime
-        max_value=max_date.to_pydatetime(),  # Convert to python datetime
-        value=(min_date.to_pydatetime(), max_date.to_pydatetime()),  # Convert to python datetime
-        format="DD-MM-YYYY"
-    )
+    # Pastikan min_date dan max_date adalah tipe datetime sebelum di set di slider
+    if isinstance(min_date, pd.Timestamp) and isinstance(max_date, pd.Timestamp):
+        selected_date = st.slider(
+            "Pilih Tanggal",
+            min_value=min_date,
+            max_value=max_date,
+            value=(min_date, max_date),
+            format="DD-MM-YYYY"
+        )
 
-    # Filter the data based on the selected date range
-    filtered_df = df[df['TANGGAL'].dt.date.between(selected_date[0].date(), selected_date[1].date())]
+        # Filter data berdasarkan rentang tanggal yang dipilih
+        filtered_df = df[df['TANGGAL'].dt.date.between(selected_date[0].date(), selected_date[1].date())]
 
-    # Display the filtered data
-    st.write(filtered_df)
+        # Tampilkan data yang difilter
+        st.write(filtered_df)
+    else:
+        st.error("Kolom 'TANGGAL' tidak dapat dikonversi ke tipe datetime.")
 else:
-    st.error("Column 'TANGGAL' not found in the dataframe.")
+    st.error("Kolom 'TANGGAL' tidak ditemukan atau semua nilainya null dalam dataframe.")
