@@ -26,33 +26,33 @@ def get_data():
 # Display data in Streamlit
 st.title('Monitoring Ketersediaan & Kondisi Dump Truck')
 
-# Dapatkan data
+# Get data
 df = get_data()
 
-# Asumsikan 'TANGGAL' adalah nama kolom tanggal Anda
-if 'TANGGAL' in df and not df['TANGGAL'].isnull().all():
-    # Konversi string ke datetime jika belum diubah
-    df['TANGGAL'] = pd.to_datetime(df['TANGGAL'], errors='coerce')
+# Assume 'TANGGAL' is your date column name
+if 'TANGGAL' in df.columns:
+    df['TANGGAL'] = pd.to_datetime(df['TANGGAL'], errors='coerce')  # Convert string to datetime
+    
+    # Filter out rows where 'TANGGAL' is NaT after conversion
+    df = df[~df['TANGGAL'].isna()]
     
     min_date = df['TANGGAL'].min()
     max_date = df['TANGGAL'].max()
 
-    # Pastikan min_date dan max_date adalah tipe datetime sebelum di set di slider
-    if isinstance(min_date, pd.Timestamp) and isinstance(max_date, pd.Timestamp):
-        selected_date = st.slider(
-            "Pilih Tanggal",
-            min_value=min_date,
-            max_value=max_date,
-            value=(min_date, max_date),
-            format="DD-MM-YYYY"
-        )
-
-        # Filter data berdasarkan rentang tanggal yang dipilih
-        filtered_df = df[df['TANGGAL'].dt.date.between(selected_date[0].date(), selected_date[1].date())]
-
-        # Tampilkan data yang difilter
-        st.write(filtered_df)
-    else:
-        st.error("Kolom 'TANGGAL' tidak dapat dikonversi ke tipe datetime.")
+    # Slider for selecting date range
+    selected_date_range = st.slider(
+        "Select Date Range",
+        value=(min_date.to_pydatetime(), max_date.to_pydatetime()),
+        format="MM/DD/YY"
+    )
+    
+    # Convert selected_date_range to datetime if not already
+    start_date, end_date = pd.to_datetime(selected_date_range[0]), pd.to_datetime(selected_date_range[1])
+    
+    # Filter dataframe based on selected date range
+    filtered_df = df[(df['TANGGAL'] >= start_date) & (df['TANGGAL'] <= end_date)]
+    
+    # Display filtered data
+    st.write(filtered_df)
 else:
-    st.error("Kolom 'TANGGAL' tidak ditemukan atau semua nilainya null dalam dataframe.")
+    st.error("Column 'TANGGAL' not found in dataframe.")
