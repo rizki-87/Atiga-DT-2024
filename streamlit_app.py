@@ -23,6 +23,12 @@ def get_data():
 
     return df
 
+# Tentukan lokasi logo perusahaan Anda
+logo_path = "atiga.png"
+
+# Tampilkan logo di aplikasi Streamlit
+st.image(logo_path, use_column_width=True)
+
 # Display data in Streamlit
 st.title('Dashboard Visualisasi Data')
 
