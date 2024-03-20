@@ -44,6 +44,16 @@ st.title('Dashboard Visualisasi Data')
 # Load the data
 df = get_data()
 
+# Visualization for "STATUS DT"
+status_counts = df['STATUS DT'].value_counts()
+fig1, ax1 = plt.subplots()
+ax1.pie(status_counts, labels=status_counts.index, autopct='%1.1f%%', startangle=90)
+ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+ax1.set_title('Distribusi Status DT')
+
+# Display the pie chart in Streamlit
+st.pyplot(fig1)
+
 # Sidebar for the slicers
 with st.sidebar:
     # Date picker
