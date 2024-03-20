@@ -35,6 +35,29 @@ with col2:
 # Display data in Streamlit
 st.title('Dashboard Visualisasi Data')
 
+# Set theme colors
+primaryColor="#E694FF"
+backgroundColor="#00172B"
+secondaryBackgroundColor="#0083B8"
+textColor="#FFFFFF"
+font="sans serif"
+
+# Apply theme colors
+st.markdown(
+    f"""
+    <style>
+    .reportview-container .main .block-container{{
+        color: {textColor};
+        background-color: {backgroundColor};
+    }}
+    .reportview-container .main {{
+        color: {textColor};
+        background-color: {backgroundColor};
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+
 # Load the data
 df = get_data()
 
