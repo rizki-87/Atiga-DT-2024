@@ -59,11 +59,19 @@ with st.sidebar:
     # Date picker
     start_date = date(2024, 1, 1)
     end_date = date(2024, 12, 31)
-    selected_date = st.date_input("Select date", [start_date, start_date], min_value=start_date, max_value=end_date)
-    st.write("Selected Start Date:", selected_date[0].strftime("%d-%m-%Y"))
-    if len(selected_date) > 1:
-        st.write("Selected End Date:", selected_date[1].strftime("%d-%m-%Y"))
     
+    # Check if st.date_input is returning one date or a range of dates
+    selected_date = st.date_input("Select date", [start_date, end_date], min_value=start_date, max_value=end_date)
+
+    # If a range of dates is returned, unpack them into two variables
+    if isinstance(selected_date, list):
+        selected_start_date, selected_end_date = selected_date
+        st.write("Selected Start Date:", selected_start_date.strftime("%d-%m-%Y"))
+        st.write("Selected End Date:", selected_end_date.strftime("%d-%m-%Y"))
+    else:
+        # Only one date is returned, use it as both start and end date
+        selected_start_date = selected_end_date = selected_date
+        st.write("Selected Date:", selected_start_date.strftime("%d-%m-%Y"))
     # Slicer for "Status DT"
     unique_status = df['STATUS DT'].unique().tolist()
     selected_status = st.multiselect('Select Status DT', unique_status, default=unique_status)
