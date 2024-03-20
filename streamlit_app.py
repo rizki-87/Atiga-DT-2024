@@ -5,7 +5,7 @@ import requests
 # Function to get data from Google Spreadsheet
 def get_data():
     # Your spreadsheet's published CSV URL
-    url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTnflGSDkG_l9mSnawp-HEHX-R5jMfluS1rp0HlF_hMBpQvtG21d3-zPE4TxD80CvQVPjJszeOmNWJB/pub?output=csv'
+    url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTnflGSDkG_l9mSnawp-HEHX-R5jMfluS1rp0HlF_hMBpQvtG21d3-zPE4TxD80CvQVPjJszeOmNWJB/pub?gid=384797514&single=true&output=csv'
     
     # Read the CSV content into a DataFrame
     df = pd.read_csv(url)
