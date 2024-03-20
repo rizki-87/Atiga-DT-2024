@@ -27,7 +27,7 @@ logo_path = "atiga.png"
 col1, col2 = st.columns([3, 1])  # Sesuaikan rasio sesuai kebutuhan
 
 with col1:
-    st.write("")  # Isi dengan konten atau biarkan kosong
+    st.write("tes")  # Isi dengan konten atau biarkan kosong
 
 with col2:
     st.image(logo_path, width=150)  # Sesuaikan lebar sesuai kebutuhan
