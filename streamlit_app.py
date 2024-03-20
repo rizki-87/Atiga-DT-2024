@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import requests
-from datetime import datetime, date
+from datetime import datetime, timedelta
 
 # Function to get data from Google Spreadsheet
 def get_data():
@@ -23,22 +23,28 @@ def get_data():
 
     return df
 
-# Sidebar for the date input
-with st.sidebar:
-    # Define the start and end dates for the year 2024
-    start_date = date(2024, 1, 1)
-    end_date = date(2024, 12, 31)
-    
-    # Use the st.date_input component to receive a date input
-    selected_date = st.date_input("Select date for the year 2024",
-                                  min_value=start_date,
-                                  max_value=end_date,
-                                  format="DD-MM-YYYY")
-    # Display the selected date in the format "DD-MM-YYYY"
-    st.write("Selected Date:", selected_date.strftime("%d-%m-%Y"))
-
 # Display data in Streamlit
 st.title('Dashboard Visualisasi Data')
+
+# Sidebar for the date range input
+with st.sidebar:
+    # Calculate the next year
+    today = datetime.now()
+    next_year = today.year 
+    start_date = datetime(next_year, 1, 1)  # Start of next year
+    end_date = datetime(next_year, 12, 31)  # End of next year
+    
+    # Use the st.date_input component to receive a date range input
+    selected_start_date, selected_end_date = st.date_input(
+        "Select your vacation for next year",
+        value=(start_date, start_date + timedelta(days=30)),  # Default to a 30-day range
+        min_value=start_date,
+        max_value=end_date
+    )
+
+    # Display the selected date range in the format "DD-MM-YYYY"
+    st.write("Selected Start Date:", selected_start_date.strftime("%d-%m-%Y"))
+    st.write("Selected End Date:", selected_end_date.strftime("%d-%m-%Y"))
 
 # Button for refreshing data
 if st.button('Refresh Data'):
