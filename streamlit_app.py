@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 from datetime import datetime, date
 
 # Function to get data from Google Spreadsheet
@@ -46,6 +47,17 @@ ax1.set_title('Distribusi Status DT')
 
 # Display the pie chart in Streamlit
 st.pyplot(fig1)
+
+# Visualization for "JENIS DT" vs "STATUS DT"
+fig2, ax2 = plt.subplots()
+sns.countplot(data=df, x='JENIS DT', hue='STATUS DT', ax=ax2)
+ax2.set_title('Hubungan antara Jenis dan Status DT')
+ax2.set_xlabel('Jenis DT')
+ax2.set_ylabel('Jumlah')
+ax2.legend(title='Status DT')
+
+# Display the second plot in Streamlit
+st.pyplot(fig2)
 
 # Sidebar for the slicers
 with st.sidebar:
