@@ -57,9 +57,10 @@ st.markdown(
     </style>
     """,
     unsafe_allow_html=True
+)
 
 # Load the data
-# df = get_data()
+df = get_data()
 
 # Visualization for "STATUS DT"
 status_counts = df['STATUS DT'].value_counts()
