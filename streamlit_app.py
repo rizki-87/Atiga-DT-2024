@@ -27,7 +27,7 @@ def get_data():
 logo_path = "atiga.png"
 
 # Tampilkan logo di aplikasi Streamlit
-st.image(logo_path, use_column_width=True)
+# st.image(logo_path, use_column_width=True)
 
 # Menggunakan kolom untuk menyesuaikan tata letak
 col1, col2 = st.columns([3, 1])  # Sesuaikan rasio sesuai kebutuhan
