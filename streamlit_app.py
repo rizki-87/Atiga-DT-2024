@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import requests
+from datetime import datetime
 
 # Function to get data from Google Spreadsheet
 def get_data():
@@ -21,6 +22,13 @@ def get_data():
     df['TAHUN DT'] = df['TAHUN DT'].astype(int)
 
     return df
+
+# Sidebar for the date input
+with st.sidebar:
+    # Use the st.date_input component to receive a date input
+    selected_date = st.date_input("Select date", datetime.today())
+    # Display the selected date in the format "DD-MM-YYYY"
+    st.write("Selected Date:", selected_date.strftime("%d-%m-%Y"))
 
 # Display data in Streamlit
 st.title('Dashboard Visualisasi Data')
