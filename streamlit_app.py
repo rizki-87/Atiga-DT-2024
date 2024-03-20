@@ -19,33 +19,33 @@ def get_data():
     # Fill NaN values with a value of your choice or drop them
     df['TAHUN DT'] = df['TAHUN DT'].fillna(0).astype(int) # Option 1: Fill with 0
     
-    # Now safely convert to integers
-    df['TAHUN DT'] = df['TAHUN DT'].astype(int)
+    # Convert the 'TANGGAL' column to date objects
+    df['TANGGAL'] = pd.to_datetime(df['TANGGAL'], dayfirst=True, errors='coerce').dt.date
+
     return df
 
 # Display data in Streamlit
 st.title('Monitoring Ketersediaan & Kondisi Dump Truck')
 
-# Dapatkan data
+# Get the data
 df = get_data()
 
-# Asumsikan 'TANGGAL' adalah nama kolom tanggal Anda
-if 'TANGGAL' in df.columns:
-    # Tentukan tanggal minimum dan maksimum
+# Assume 'TANGGAL' is your date column name
+if 'TANGGAL' in df.columns and not df['TANGGAL'].isnull().all():
     min_date = df['TANGGAL'].min()
     max_date = df['TANGGAL'].max()
 
-    # Buat slider untuk memilih rentang tanggal
+    # Create the date slider
     selected_date_range = st.slider(
         "Pilih Rentang Tanggal",
         value=(min_date, max_date),
-        format="DD-MM-YYYY"
+        format='DD-MM-YYYY'
     )
 
-    # Filter dataframe berdasarkan rentang tanggal yang dipilih
+    # Filter the dataframe based on the selected date range
     filtered_df = df[(df['TANGGAL'] >= selected_date_range[0]) & (df['TANGGAL'] <= selected_date_range[1])]
 
-    # Tampilkan data yang difilter
+    # Display the filtered data
     st.write(filtered_df)
 else:
-    st.error("Kolom 'TANGGAL' tidak ditemukan dalam dataframe.")
+    st.error("Kolom 'TANGGAL' tidak ditemukan atau mengandung nilai null dalam dataframe.")
