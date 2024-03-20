@@ -13,6 +13,10 @@ def get_data():
 
     # Read the CSV content into a DataFrame
     df = pd.read_csv(url)
+    
+    # Convert the TAHUN DT column to integers
+    df['TAHUN DT'] = df['TAHUN DT'].apply(lambda x: int(x) if not pd.isnull(x) else x)
+    
     return df
 
 # Display data in Streamlit
