@@ -1,4 +1,4 @@
-streamlit==x.x.x
-matplotlib==x.x.x
-seaborn==x.x.x
-pandas==x.x.x
+streamlit==1.12.2
+matplotlib==3.5.2
+seaborn==0.11.2
+pandas==1.4.3
