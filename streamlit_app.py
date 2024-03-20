@@ -12,16 +12,17 @@ def get_data():
     
     # Send a HTTP GET request to the URL
     response = requests.get(url)
-    assert response.status_code == 200, 'Wrong status code'  # Check to make sure the request went through
+    assert response.status_code == 200, 'Wrong status code'
 
     # Read the CSV content into a DataFrame
     df = pd.read_csv(url)
+    
     # Convert the 'TAHUN DT' column to numeric, coercing errors to NaN
     df['TAHUN DT'] = pd.to_numeric(df['TAHUN DT'], errors='coerce')
-
-    # Fill NaN values with a value of your choice or drop them
-    df['TAHUN DT'] = df['TAHUN DT'].fillna(0).astype(int) # Option 1: Fill with 0
     
+    # Fill NaN values with a value of your choice or drop them
+    df['TAHUN DT'] = df['TAHUN DT'].fillna(0).astype(int)
+
     # Convert the 'TANGGAL' column to date objects
     df['TANGGAL'] = pd.to_datetime(df['TANGGAL'], dayfirst=True, errors='coerce').dt.date
 
@@ -35,6 +36,7 @@ df = get_data()
 
 # Assume 'TANGGAL' is your date column name
 if 'TANGGAL' in df.columns and not df['TANGGAL'].isnull().all():
+    # Extract dates for the slider
     min_date = df['TANGGAL'].min()
     max_date = df['TANGGAL'].max()
 
@@ -49,6 +51,8 @@ if 'TANGGAL' in df.columns and not df['TANGGAL'].isnull().all():
     filtered_df = df[(df['TANGGAL'] >= selected_date_range[0]) & (df['TANGGAL'] <= selected_date_range[1])]
 
     # Display the filtered data
+    # Format dates in the dataframe to 'DD-MM-YYYY' before displaying
+    filtered_df['TANGGAL'] = filtered_df['TANGGAL'].dt.strftime('%d-%m-%Y')
     st.write(filtered_df)
 else:
     st.error("Kolom 'TANGGAL' tidak ditemukan atau mengandung nilai null dalam dataframe.")
