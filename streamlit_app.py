@@ -26,33 +26,26 @@ def get_data():
 # Display data in Streamlit
 st.title('Monitoring Ketersediaan & Kondisi Dump Truck')
 
-# Get data
+# Dapatkan data
 df = get_data()
 
-# Assume 'TANGGAL' is your date column name
+# Asumsikan 'TANGGAL' adalah nama kolom tanggal Anda
 if 'TANGGAL' in df.columns:
-    df['TANGGAL'] = pd.to_datetime(df['TANGGAL'], errors='coerce')  # Convert string to datetime
-    
-    # Filter out rows where 'TANGGAL' is NaT after conversion
-    df = df[~df['TANGGAL'].isna()]
-    
+    # Tentukan tanggal minimum dan maksimum
     min_date = df['TANGGAL'].min()
     max_date = df['TANGGAL'].max()
 
-    # Slider for selecting date range
+    # Buat slider untuk memilih rentang tanggal
     selected_date_range = st.slider(
-        "Select Date Range",
-        value=(min_date.to_pydatetime(), max_date.to_pydatetime()),
-        format="MM/DD/YY"
+        "Pilih Rentang Tanggal",
+        value=(min_date, max_date),
+        format="DD-MM-YYYY"
     )
-    
-    # Convert selected_date_range to datetime if not already
-    start_date, end_date = pd.to_datetime(selected_date_range[0]), pd.to_datetime(selected_date_range[1])
-    
-    # Filter dataframe based on selected date range
-    filtered_df = df[(df['TANGGAL'] >= start_date) & (df['TANGGAL'] <= end_date)]
-    
-    # Display filtered data
+
+    # Filter dataframe berdasarkan rentang tanggal yang dipilih
+    filtered_df = df[(df['TANGGAL'] >= selected_date_range[0]) & (df['TANGGAL'] <= selected_date_range[1])]
+
+    # Tampilkan data yang difilter
     st.write(filtered_df)
 else:
-    st.error("Column 'TANGGAL' not found in dataframe.")
+    st.error("Kolom 'TANGGAL' tidak ditemukan dalam dataframe.")
