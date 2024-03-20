@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import requests
-from datetime import datetime, timedelta
+from datetime import datetime, date
 
 # Function to get data from Google Spreadsheet
 def get_data():
@@ -26,31 +26,33 @@ def get_data():
 # Display data in Streamlit
 st.title('Dashboard Visualisasi Data')
 
-# Sidebar for the date range input
-with st.sidebar:
-    # Calculate the next year
-    today = datetime.now()
-    next_year = today.year 
-    start_date = datetime(next_year, 1, 1)  # Start of next year
-    end_date = datetime(next_year, 12, 31)  # End of next year
-    
-    # Use the st.date_input component to receive a date range input
-    selected_start_date, selected_end_date = st.date_input(
-        "Select your vacation for next year",
-        value=(start_date, start_date + timedelta(days=30)),  # Default to a 30-day range
-        min_value=start_date,
-        max_value=end_date
-    )
+# Load the data
+df = get_data()
 
-    # Display the selected date range in the format "DD-MM-YYYY"
-    st.write("Selected Start Date:", selected_start_date.strftime("%d-%m-%Y"))
-    st.write("Selected End Date:", selected_end_date.strftime("%d-%m-%Y"))
+# Sidebar for the slicers
+with st.sidebar:
+    # Date picker
+    start_date = date(2024, 1, 1)
+    end_date = date(2024, 12, 31)
+    selected_date = st.date_input("Select date", [start_date, start_date], min_value=start_date, max_value=end_date)
+    st.write("Selected Start Date:", selected_date[0].strftime("%d-%m-%Y"))
+    if len(selected_date) > 1:
+        st.write("Selected End Date:", selected_date[1].strftime("%d-%m-%Y"))
+    
+    # Slicer for "Status DT"
+    unique_status = df['STATUS DT'].unique().tolist()
+    selected_status = st.multiselect('Select Status DT', unique_status, default=unique_status)
+    
+    # Slicer for "Jenis DT"
+    unique_jenis = df['JENIS DT'].unique().tolist()
+    selected_jenis = st.multiselect('Select Jenis DT', unique_jenis, default=unique_jenis)
+
+# Filter the data based on the slicers
+filtered_data = df[(df['STATUS DT'].isin(selected_status)) & (df['JENIS DT'].isin(selected_jenis))]
 
 # Button for refreshing data
 if st.button('Refresh Data'):
-    df = get_data()
-    st.write(df)
+    st.write(filtered_data)
 else:
-    # Display the initial data when the app is first run
-    df = get_data()
-    st.write(df)
+    # Display the filtered data when the app is first run
+    st.write(filtered_data)
