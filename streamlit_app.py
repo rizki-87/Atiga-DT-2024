@@ -30,7 +30,7 @@ logo_path = "atiga.png"
 st.image(logo_path, use_column_width=True)
 
 # Menggunakan kolom untuk menyesuaikan tata letak
-col1, col2 = st.beta_columns([3, 1])  # Sesuaikan rasio sesuai kebutuhan
+col1, col2 = st.columns([3, 1])  # Sesuaikan rasio sesuai kebutuhan
 
 with col1:
     st.write("")  # Isi dengan konten atau biarkan kosong
