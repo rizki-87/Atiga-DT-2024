@@ -13,12 +13,18 @@ def get_data():
 
     # Read the CSV content into a DataFrame
     df = pd.read_csv(url)
-    # Ensure the 'TAHUN DT' column is treated as integers to remove commas
+    # Convert the 'TAHUN DT' column to numeric, coercing errors to NaN
+    df['TAHUN DT'] = pd.to_numeric(df['TAHUN DT'], errors='coerce')
+
+    # Fill NaN values with a value of your choice or drop them
+    df['TAHUN DT'] = df['TAHUN DT'].fillna(0).astype(int) # Option 1: Fill with 0
+    
+    # Now safely convert to integers
     df['TAHUN DT'] = df['TAHUN DT'].astype(int)
     return df
 
 # Display data in Streamlit
-st.title('Dashboard Visualisasi Data')
+st.title('Monitoring Ketersediaan & Kondisi Dump Truck')
 
 # Button for refreshing data
 if st.button('Refresh Data'):
