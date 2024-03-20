@@ -60,39 +60,76 @@ ax2.legend(title='Status DT')
 st.pyplot(fig2)
 
 # Sidebar for the slicers
+# with st.sidebar:
+#     # Date picker
+#     start_date = date(2024, 1, 1)
+#     end_date = date(2024, 12, 31)
+    
+#     selected_date = st.date_input("Select date", [start_date, end_date], min_value=start_date, max_value=end_date)
+
+#     # Handle single and range of dates input
+#     if isinstance(selected_date, list):
+#         # Unpack range of dates
+#         selected_start_date, selected_end_date = selected_date
+#         st.write("Selected Start Date:", selected_start_date.strftime("%d-%m-%Y"))
+#         st.write("Selected End Date:", selected_end_date.strftime("%d-%m-%Y"))
+#     else:
+#         # Handle single date input
+#         selected_start_date = selected_end_date = selected_date
+#         st.write("Selected Date:", selected_start_date.strftime("%d-%m-%Y"))
+    
+#     # Slicer for "Status DT"
+#     unique_status = df['STATUS DT'].unique().tolist()
+#     selected_status = st.multiselect('Select Status DT', unique_status, default=unique_status)
+    
+#     # Slicer for "Jenis DT"
+#     unique_jenis = df['JENIS DT'].unique().tolist()
+#     selected_jenis = st.multiselect('Select Jenis DT', unique_jenis, default=unique_jenis)
+
+# # Filter the data based on the slicers
+# filtered_data = df[(df['STATUS DT'].isin(selected_status)) & (df['JENIS DT'].isin(selected_jenis))]
+
+# # Button for refreshing data
+# if st.button('Refresh Data'):
+#     st.write(filtered_data)
+# else:
+#     # Display the filtered data when the app is first run
+#     st.write(filtered_data)
+
+# Sidebar for the slicers
 with st.sidebar:
     # Date picker
     start_date = date(2024, 1, 1)
     end_date = date(2024, 12, 31)
     
-    selected_date = st.date_input("Select date", [start_date, end_date], min_value=start_date, max_value=end_date)
+    # Date input yang memungkinkan pemilihan satu tanggal atau rentang tanggal
+    selected_date = st.date_input("Pilih tanggal atau rentang tanggal", [start_date, end_date], min_value=start_date, max_value=end_date)
 
-    # Handle single and range of dates input
+    # Cek tipe data dari 'selected_date' untuk mengetahui apakah satu atau dua tanggal yang dipilih
     if isinstance(selected_date, list):
-        # Unpack range of dates
+        # Pengguna memilih rentang tanggal
         selected_start_date, selected_end_date = selected_date
-        st.write("Selected Start Date:", selected_start_date.strftime("%d-%m-%Y"))
-        st.write("Selected End Date:", selected_end_date.strftime("%d-%m-%Y"))
+        st.write("Tanggal Mulai Terpilih:", selected_start_date.strftime("%d-%m-%Y"))
+        st.write("Tanggal Akhir Terpilih:", selected_end_date.strftime("%d-%m-%Y"))
     else:
-        # Handle single date input
+        # Pengguna hanya memilih satu tanggal
         selected_start_date = selected_end_date = selected_date
-        st.write("Selected Date:", selected_start_date.strftime("%d-%m-%Y"))
+        st.write("Tanggal Terpilih:", selected_start_date.strftime("%d-%m-%Y"))
     
-    # Slicer for "Status DT"
+    # Slicer untuk "Status DT"
     unique_status = df['STATUS DT'].unique().tolist()
-    selected_status = st.multiselect('Select Status DT', unique_status, default=unique_status)
+    selected_status = st.multiselect('Pilih Status DT', unique_status, default=unique_status)
     
-    # Slicer for "Jenis DT"
+    # Slicer untuk "Jenis DT"
     unique_jenis = df['JENIS DT'].unique().tolist()
-    selected_jenis = st.multiselect('Select Jenis DT', unique_jenis, default=unique_jenis)
+    selected_jenis = st.multiselect('Pilih Jenis DT', unique_jenis, default=unique_jenis)
 
-# Filter the data based on the slicers
-filtered_data = df[(df['STATUS DT'].isin(selected_status)) & (df['JENIS DT'].isin(selected_jenis))]
+# Filter data berdasarkan slicers
+filtered_data = df[(df['STATUS DT'].isin(selected_status)) & (df['JENIS DT'].isin(selected_jenis)) & (df['TAHUN DT'] >= selected_start_date.year) & (df['TAHUN DT'] <= selected_end_date.year)]
 
-# Button for refreshing data
-if st.button('Refresh Data'):
+# Tombol untuk menyegarkan data
+if st.button('Segarkan Data'):
     st.write(filtered_data)
 else:
-    # Display the filtered data when the app is first run
+    # Tampilkan data terfilter ketika aplikasi pertama kali dijalankan
     st.write(filtered_data)
-
