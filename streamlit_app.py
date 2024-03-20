@@ -13,6 +13,8 @@ def get_data():
 
     # Read the CSV content into a DataFrame
     df = pd.read_csv(url)
+    # Ensure the 'TAHUN DT' column is treated as integers to remove commas
+    df['TAHUN DT'] = df['TAHUN DT'].astype(int)
     return df
 
 # Display data in Streamlit
