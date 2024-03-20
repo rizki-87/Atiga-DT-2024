@@ -30,28 +30,23 @@ st.title('Monitoring Ketersediaan & Kondisi Dump Truck')
 df = get_data()
 
 # Assuming 'TANGGAL' is the name of your date column
-min_date = df['TANGGAL'].min()
-max_date = df['TANGGAL'].max()
+if 'TANGGAL' in df:
+    min_date = df['TANGGAL'].min()
+    max_date = df['TANGGAL'].max()
 
-# Create the date slider
-selected_date = st.slider(
-    "Pilih Tanggal",
-    min_value=min_date,
-    max_value=max_date,
-    value=(min_date, max_date),
-    format="DD/MM/YYYY"
-)
+    # Create the date slider
+    selected_date = st.slider(
+        "Pilih Tanggal",
+        min_value=min_date.to_pydatetime(),  # Convert to python datetime
+        max_value=max_date.to_pydatetime(),  # Convert to python datetime
+        value=(min_date.to_pydatetime(), max_date.to_pydatetime()),  # Convert to python datetime
+        format="DD-MM-YYYY"
+    )
 
-# Filter the data based on the selected date range
-filtered_df = df[df['TANGGAL'].between(*selected_date)]
+    # Filter the data based on the selected date range
+    filtered_df = df[df['TANGGAL'].dt.date.between(selected_date[0].date(), selected_date[1].date())]
 
-# Display the filtered data
-st.write(filtered_df)
-# Button for refreshing data
-if st.button('Refresh Data'):
-    df = get_data()
-    st.write(df)
+    # Display the filtered data
+    st.write(filtered_df)
 else:
-    # Display the initial data when the app is first run
-    df = get_data()
-    st.write(df)
+    st.error("Column 'TANGGAL' not found in the dataframe.")
