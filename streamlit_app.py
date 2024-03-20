@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 import requests
 
+# Membersihkan cache
+st.legacy_caching.clear_cache()
+
 # Function to get data from Google Spreadsheet
 def get_data():
     # Your spreadsheet's published CSV URL
